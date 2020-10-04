@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PetApiLib.Model;
 
 namespace PetApiLib.Api
@@ -8,8 +9,16 @@ namespace PetApiLib.Api
     /// </summary>
     public class PetApi
     {
-        private readonly RestClientLibrary _restClient = new RestClientLibrary("https://petstore.swagger.io/v2");
-        
+        private readonly IRestClientLibrary _restClient;
+
+        public PetApi(string baseUrl)
+        {
+            if (baseUrl == null) 
+                throw new ArgumentNullException(nameof(baseUrl));
+
+            _restClient = new RestClientLibrary(baseUrl);
+
+        }
         /// <summary>
         /// Add Pet
         /// </summary>
@@ -34,7 +43,8 @@ namespace PetApiLib.Api
 
         public void DeletePet(long? petId, string specialKey)
         {
-            _restClient.Delete($"/pet/{petId}", specialKey);
+            _restClient.AddHeader("api_key", specialKey);
+            _restClient.Delete($"/pet/{petId}");
         }
 
         public List<Pet> FindPetsByTags(List<string> tagToFind)

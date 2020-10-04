@@ -5,9 +5,10 @@ using Newtonsoft.Json;
 
 namespace PetApiLib.Api
 {
-    public class RestClientLibrary
+    public class RestClientLibrary : IRestClientLibrary
     {
         private readonly HttpClient _client = new HttpClient();
+        
         private readonly string _baseUrl;
 
         /// <summary>
@@ -58,11 +59,9 @@ namespace PetApiLib.Api
         /// Delete Verb
         /// </summary>
         /// <param name="queryPath">Query Path</param>
-        /// <param name="key">Key to delete</param>
-        public void Delete(string queryPath, string key)
+        public void Delete(string queryPath)
         {
             Uri url = new Uri(_baseUrl + queryPath, UriKind.Absolute);
-            _client.DefaultRequestHeaders.Add("api_key", key);
             HttpResponseMessage result = _client.DeleteAsync(url).Result;
             if (result.StatusCode != HttpStatusCode.OK)
                 throw new PetApiException((int)result.StatusCode, "Unable to delete data");
@@ -84,6 +83,18 @@ namespace PetApiLib.Api
                 throw new PetApiException((int)result.StatusCode, "Unable to create element");
             string returnValue = result.Content.ReadAsStringAsync().Result;
 
+        }
+
+        public void AddHeader(string key, string value)
+        {
+            if (!_client.DefaultRequestHeaders.Contains(key))
+            {
+                _client.DefaultRequestHeaders.Add(key, value);
+                return;
+            }
+
+            _client.DefaultRequestHeaders.Remove(key);
+            _client.DefaultRequestHeaders.Add(key, value);
         }
     }
 }

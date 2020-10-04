@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using PetApiLib.Api;
 using PetApiLib.Model;
+using PetStoreTest.Base;
 using PetStoreTest.Tools;
 
 namespace PetStoreTest.Tests
 {
-    public class PetTests
+    public class PetTests : SwaggerTests
     {
-        private PetApi _petApi;
-
-        [SetUp]
-        public void Setup()
-        {
-            this._petApi = new PetApi();
-        }
 
         [Test]
         public void AddNewPetTest()

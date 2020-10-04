@@ -170,5 +170,10 @@ namespace PetApiLib.Model
                     this.Status.Equals(input.Status))
                 );
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
