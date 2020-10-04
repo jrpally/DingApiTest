@@ -15,7 +15,7 @@ Once Downloaded go to the solution directory and run:
 
 ```python
 dotnet build
-dotnet test
+dotnet test --no-build --settings .\PetStoreTest\TestSettings\pettest.runsettings
 ```
 
 ## Contributing
